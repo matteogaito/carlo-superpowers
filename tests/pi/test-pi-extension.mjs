@@ -10,6 +10,7 @@ const repoRoot = resolve(__dirname, '../..');
 const packageJsonPath = resolve(repoRoot, 'package.json');
 const extensionPath = resolve(repoRoot, '.pi/extensions/superpowers.ts');
 const piToolsPath = resolve(repoRoot, 'skills/using-superpowers/references/pi-tools.md');
+const carloBootstrapPath = resolve(repoRoot, 'skills/carlo-using-superpowers/SKILL.md');
 const codingSkills = [
   'systematic-debugging',
   'test-driven-development',
@@ -115,6 +116,13 @@ test('coding skills hand human decisions to Carlo instead of stopping for routin
   assert.match(debugging, /CARLO escalation/);
   assert.doesNotMatch(tdd, /ask your human partner|human partner's permission/);
   assert.doesNotMatch(debugging, /Discuss with your human partner before attempting more fixes/);
+});
+
+test('Carlo bootstrap is separate from the upstream using-superpowers skill', async () => {
+  const carloBootstrap = await readFile(carloBootstrapPath, 'utf8');
+  const upstreamBootstrap = await readFile(resolve(repoRoot, 'skills/using-superpowers/SKILL.md'), 'utf8');
+  assert.match(carloBootstrap, /CARLO-approved task/);
+  assert.match(upstreamBootstrap, /Before entering plan mode/);
 });
 
 test('session_compact injects bootstrap after compaction summaries, not before compaction', async () => {

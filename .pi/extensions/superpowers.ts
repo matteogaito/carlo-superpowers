@@ -9,7 +9,7 @@ const BOOTSTRAP_MARKER = "superpowers:using-superpowers bootstrap for pi";
 const extensionDir = dirname(fileURLToPath(import.meta.url));
 const packageRoot = resolve(extensionDir, "../..");
 const skillsDir = resolve(packageRoot, "skills");
-const bootstrapSkillPath = resolve(skillsDir, "using-superpowers", "SKILL.md");
+const bootstrapSkillPath = resolve(skillsDir, "carlo-using-superpowers", "SKILL.md");
 const codingSkillPaths = [
 	"systematic-debugging",
 	"test-driven-development",
