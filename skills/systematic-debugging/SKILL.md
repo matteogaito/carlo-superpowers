@@ -207,7 +207,7 @@ You MUST complete each phase before proceeding to the next.
    - Are we "sticking with it through sheer inertia"?
    - Should we refactor architecture vs. continue fixing symptoms?
 
-   **Discuss with your human partner before attempting more fixes**
+   **Return the evidence and diagnosis to CARLO escalation for replan or a real human blocker before attempting more fixes.**
 
    This is NOT a failed hypothesis - this is a wrong architecture.
 

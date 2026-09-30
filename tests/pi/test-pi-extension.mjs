@@ -10,6 +10,11 @@ const repoRoot = resolve(__dirname, '../..');
 const packageJsonPath = resolve(repoRoot, 'package.json');
 const extensionPath = resolve(repoRoot, '.pi/extensions/superpowers.ts');
 const piToolsPath = resolve(repoRoot, 'skills/using-superpowers/references/pi-tools.md');
+const codingSkills = [
+  'systematic-debugging',
+  'test-driven-development',
+  'verification-before-completion',
+];
 
 async function readPackageJson() {
   return JSON.parse(await readFile(packageJsonPath, 'utf8'));
@@ -42,12 +47,12 @@ function textOf(message) {
     .join('\n');
 }
 
-test('package.json declares a pi package with skills and extension resources', async () => {
+test('Pi package exposes only Carlo coding skills and its bootstrap', async () => {
   const pkg = await readPackageJson();
 
   assert.equal(pkg.name, 'superpowers');
   assert.ok(pkg.keywords.includes('pi-package'));
-  assert.deepEqual(pkg.pi.skills, ['./skills']);
+  assert.deepEqual(pkg.pi.skills, codingSkills.map((name) => `./skills/${name}`));
   assert.deepEqual(pkg.pi.extensions, ['./.pi/extensions/superpowers.ts']);
 });
 
@@ -60,13 +65,13 @@ test('extension registers lifecycle hooks without pre-compaction injection', asy
   assert.equal((handlers.get('session_before_compact') ?? []).length, 0);
 });
 
-test('resources_discover contributes the bundled skills directory', async () => {
+test('resources_discover contributes only Carlo coding skills', async () => {
   const { handlers } = await loadExtension();
   const discover = firstHandler(handlers, 'resources_discover');
 
   const result = await discover({ type: 'resources_discover', cwd: repoRoot, reason: 'startup' }, {});
 
-  assert.deepEqual(result.skillPaths, [resolve(repoRoot, 'skills')]);
+  assert.deepEqual(result.skillPaths, codingSkills.map((name) => resolve(repoRoot, 'skills', name)));
 });
 
 test('startup context injects the bootstrap as one user message until agent_end', async () => {
@@ -85,6 +90,8 @@ test('startup context injects the bootstrap as one user message until agent_end'
   assert.equal(result.messages.length, 2);
   assert.equal(result.messages[0].role, 'user');
   assert.match(textOf(result.messages[0]), /You have superpowers/);
+  assert.match(textOf(result.messages[0]), /CARLO-approved task/);
+  assert.doesNotMatch(textOf(result.messages[0]), /brainstorming/);
   assert.match(textOf(result.messages[0]), /Pi tool mapping/);
   assert.equal(result.messages[1], originalMessages[0]);
 
@@ -98,6 +105,16 @@ test('startup context injects the bootstrap as one user message until agent_end'
   await agentEnd({ type: 'agent_end', messages: [] }, {});
   const afterEnd = await context({ type: 'context', messages: originalMessages }, {});
   assert.equal(afterEnd, undefined, 'startup bootstrap should clear after agent_end');
+});
+
+test('coding skills hand human decisions to Carlo instead of stopping for routine approval', async () => {
+  const tdd = await readFile(resolve(repoRoot, 'skills/test-driven-development/SKILL.md'), 'utf8');
+  const debugging = await readFile(resolve(repoRoot, 'skills/systematic-debugging/SKILL.md'), 'utf8');
+
+  assert.match(tdd, /CARLO-approved task/);
+  assert.match(debugging, /CARLO escalation/);
+  assert.doesNotMatch(tdd, /ask your human partner|human partner's permission/);
+  assert.doesNotMatch(debugging, /Discuss with your human partner before attempting more fixes/);
 });
 
 test('session_compact injects bootstrap after compaction summaries, not before compaction', async () => {

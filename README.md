@@ -235,10 +235,17 @@ already use it in another harness.
 
 ### Pi
 
+This Carlo fork keeps the upstream skill sources but exposes only
+`test-driven-development`, `systematic-debugging`, and
+`verification-before-completion` to Pi. Its short bootstrap treats an approved
+Carlo work package as authorization to implement and sends real blockers through
+Carlo's escalation workflow. The other upstream skills remain in the repository
+for future syncing, but the Pi package does not load them.
+
 Install Superpowers as a Pi package from this repository:
 
 ```bash
-pi install git:github.com/obra/superpowers
+pi install git:github.com/matteogaito/carlo-superpowers
 ```
 
 For local development, run Pi with this checkout loaded as a temporary package:
@@ -247,7 +254,9 @@ For local development, run Pi with this checkout loaded as a temporary package:
 pi -e /path/to/superpowers
 ```
 
-The Pi package loads the Superpowers skills and a small extension that injects the `using-superpowers` bootstrap at session startup and again after compaction. Pi has native skills, so no compatibility `Skill` tool is required. Subagent and task-list tools remain optional Pi companion packages.
+The Pi package loads the three coding skills and injects the Carlo bootstrap at
+session startup and after compaction. Pi has native skills, so no compatibility
+`Skill` tool is required.
 
 ### Qwen Code
 

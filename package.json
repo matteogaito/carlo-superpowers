@@ -17,7 +17,9 @@
       "./.pi/extensions/superpowers.ts"
     ],
     "skills": [
-      "./skills"
+      "./skills/systematic-debugging",
+      "./skills/test-driven-development",
+      "./skills/verification-before-completion"
     ]
   }
 }

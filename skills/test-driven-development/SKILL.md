@@ -21,7 +21,7 @@ Write the test first. Watch it fail. Write minimal code to pass.
 - Refactoring
 - Behavior changes
 
-**Exceptions (ask your human partner):**
+**In a CARLO-approved task, use the work package's closest meaningful validation for:**
 - Throwaway prototypes
 - Generated code
 - Configuration files
@@ -309,7 +309,7 @@ Can't check all boxes? You skipped TDD. Start over.
 
 | Problem | Solution |
 |---------|----------|
-| Don't know how to test | Write wished-for API. Write assertion first. Ask your human partner. |
+| Don't know how to test | Inspect nearby tests, write the smallest meaningful assertion, and report a concrete validation limit to Carlo if none is possible. |
 | Test too complicated | Design too complicated. Simplify interface. |
 | Must mock everything | Code too coupled. Use dependency injection. |
 | Test setup huge | Extract helpers. Still complex? Simplify design. |
@@ -327,4 +327,4 @@ Production code → test exists and failed first
 Otherwise → not TDD
 ```
 
-No exceptions without your human partner's permission.
+For a CARLO-approved task, record any test-first limitation and run the work package's required validation. Carlo decides whether the limitation needs human input.
